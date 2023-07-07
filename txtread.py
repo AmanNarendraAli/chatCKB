@@ -44,4 +44,3 @@ def main():
     vectorstore = get_vectorstore(chunks)
     return vectorstore
 
-print (" 1. Loading the text file")

@@ -43,10 +43,3 @@ def main():
     chunks = get_text_chunks(raw_text)
     vectorstore = get_vectorstore(chunks)
     return vectorstore
-
-
-print ("hello namaste")
-x = 10
-y = 10
-z = x + y
-print (z)

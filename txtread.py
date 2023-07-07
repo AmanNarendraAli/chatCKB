@@ -44,3 +44,4 @@ def main():
     vectorstore = get_vectorstore(chunks)
     return vectorstore
 
+print ("done")

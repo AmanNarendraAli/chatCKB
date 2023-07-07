@@ -43,5 +43,3 @@ def main():
     chunks = get_text_chunks(raw_text)
     vectorstore = get_vectorstore(chunks)
     return vectorstore
-
-print ("done")

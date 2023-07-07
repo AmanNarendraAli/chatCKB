@@ -45,3 +45,4 @@ def main():
     return vectorstore
 
 
+print ("hello namaste")

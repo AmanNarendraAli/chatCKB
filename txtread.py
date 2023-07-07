@@ -3,7 +3,9 @@ from PyPDF2 import PdfReader
 from langchain.embeddings.openai import OpenAIEmbeddings
 from langchain.text_splitter import CharacterTextSplitter
 from langchain.vectorstores import ElasticVectorSearch,Pinecone,Weaviate,FAISS
-
+from langchain.chat_models import ChatOpenAI
+from langchain.memory import ConversationBufferMemory
+from langchain.chains import ConversationalRetrievalChain
 os.environ["OPENAI_API_KEY"] = "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"
 
 def get_text_file_content(txt_files):
@@ -23,7 +25,22 @@ def get_text_chunks(raw_text):
     chunks = splitter.split(raw_text)
     return chunks
 
-txt_files = ["testdoc.txt"]
-raw_text = get_text_file_content(txt_files)
+def get_vectorstore(chunks):
+    embeddings = OpenAIEmbeddings()
+    vectorstore = FAISS.from_texts(texts = chunks, embedding = embeddings)
+    return vectorstore
 
-print(raw_text)
+def get_conversation_chain(vectorstore):
+    memory = ConversationBufferMemory(memory_key="ChatHistory",return_messages=True)
+    conversation_chain = ConversationalRetrievalChain.from_llm(llm=llm,retriever=vectorstore.as_retriever(),memory=memory)
+    return conversation_chain
+
+
+def main():
+    txt_files = ["testdoc.txt"]
+    raw_text = get_text_file_content(txt_files)
+    chunks = get_text_chunks(raw_text)
+    vectorstore = get_vectorstore(chunks)
+    return vectorstore
+
+

@@ -4,12 +4,13 @@ from langchain.embeddings.openai import OpenAIEmbeddings
 from langchain.text_splitter import CharacterTextSplitter
 from langchain.vectorstores import ElasticVectorSearch,Pinecone,Weaviate,FAISS
 from langchain.chat_models import ChatOpenAI
-from langchain.memory import ConversationBufferMemory
+from langchain.memory import ConversationBufferMemory,ConversationSummaryMemory
 from langchain.chains import ConversationalRetrievalChain
 from langchain.chains import LLMChain
 from langchain import PromptTemplate
 import openai
 from langchain.chains.conversational_retrieval.prompts import QA_PROMPT
+
 openai.api_key = os.environ["OPENAI_API_KEY"]
 
 def get_text_file_content(txt_files):
@@ -36,8 +37,8 @@ def get_vectorstore(chunks):
 
 def get_conversation_chain(vectorstore):
     llm = ChatOpenAI(temperature=0)
-    memory = ConversationBufferMemory(memory_key="ChatHistory",return_messages=True,output_key="answer")
-    conversation_chain = ConversationalRetrievalChain.from_llm(llm=llm,retriever=vectorstore.as_retriever(),memory=memory)
+    memory = memory = ConversationSummaryMemory(llm = llm, memory_key='chat_history', return_messages=True, output_key='answer')
+    model = ConversationalRetrievalChain.from_llm(llm=llm, retriever=vectorstore.as_retriever(),memory=memory,return_source_documents=True,get_chat_history=lambda h :h,qa_prompt=QA_PROMPT)
     return conversation_chain
 
 
@@ -48,10 +49,9 @@ def main():
     vectorstore = get_vectorstore(chunks)
     conversation_chain = get_conversation_chain(vectorstore)
     query = "What are some of Rehaan Raha's funniest escapades?"
-<<<<<<< HEAD
     chat_history = []  # Add this line if there's no chat history yet.
-    response = conversation_chain.run(question=query,chat_history=chat_history)
-    print(response)
+    response = conversation_chain.run({"question":query},return_only_outputs=True)
+    print(response["answer"])
 
 def LangChainTest():
     chat = ChatOpenAI(temperature=0)
@@ -61,9 +61,3 @@ def LangChainTest():
     print(llm_chain.run({"adjective": "corny"}))
 
 main()
-=======
-    chat_history = [] # Add this line if there's no chat history yet.
-    conversation_chain.run(chat_history=chat_history, question=query)
-    
-main()
->>>>>>> 4f1bd8bd25420caf1014b52e590a7ba19dc111fe

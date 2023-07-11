@@ -6,8 +6,9 @@ from langchain.vectorstores import ElasticVectorSearch,Pinecone,Weaviate,FAISS
 from langchain.chat_models import ChatOpenAI
 from langchain.memory import ConversationBufferMemory
 from langchain.chains import ConversationalRetrievalChain
-os.environ["OPENAI_API_KEY"] = "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"
+import openai
 
+openai.api_key = os.environ["OPENAI_API_KEY"]
 def get_text_file_content(txt_files):
     text = ""
     for txt_file in txt_files:

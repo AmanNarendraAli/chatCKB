@@ -48,13 +48,13 @@ def main():
     chunks = get_text_chunks(raw_text)
     vectorstore = get_vectorstore(chunks)
     conversation_chain = get_conversation_chain(vectorstore)
-    query = "Rehaan Raha's funniest escapades"
+    query = input("Enter your question: ")
     chat_history = []  # Add this line if there's no chat history yet.
     response = conversation_chain.run({"question":query,"chat_history":chat_history})
     print(response)
 
 def LangChainTest():
-    chat = ChatOpenAI(temperature=0)
+    chat = ChatOpenAI(temperature=1)
     prompt_template = "Tell me a {adjective} joke"
     llm_chain = LLMChain(llm=chat, prompt=PromptTemplate.from_template(prompt_template))
 

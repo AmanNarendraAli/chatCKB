@@ -38,7 +38,7 @@ def get_vectorstore(chunks):
 def get_conversation_chain(vectorstore):
     llm = ChatOpenAI(temperature=0)
     memory = memory = ConversationSummaryMemory(llm = llm, memory_key='chat_history', return_messages=True, output_key='answer')
-    model = ConversationalRetrievalChain.from_llm(llm=llm, retriever=vectorstore.as_retriever(),memory=memory,return_source_documents=True,get_chat_history=lambda h :h,qa_prompt=QA_PROMPT)
+    conversation_chain = ConversationalRetrievalChain.from_llm(llm=llm, retriever=vectorstore.as_retriever(),memory=memory)
     return conversation_chain
 
 
@@ -50,8 +50,8 @@ def main():
     conversation_chain = get_conversation_chain(vectorstore)
     query = "What are some of Rehaan Raha's funniest escapades?"
     chat_history = []  # Add this line if there's no chat history yet.
-    response = conversation_chain.run({"question":query},return_only_outputs=True)
-    print(response["answer"])
+    response = conversation_chain.run({"question":query,"chat_history":chat_history})
+    print(response)
 
 def LangChainTest():
     chat = ChatOpenAI(temperature=0)

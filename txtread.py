@@ -9,6 +9,7 @@ from langchain.chains import ConversationalRetrievalChain
 import openai
 
 openai.api_key = os.environ["OPENAI_API_KEY"]
+
 def get_text_file_content(txt_files):
     text = ""
     for txt_file in txt_files:
@@ -23,7 +24,7 @@ def get_text_chunks(raw_text):
         chunk_overlap = 100,
         length_function = len
     )
-    chunks = splitter.split(raw_text)
+    chunks = splitter.split_text(raw_text)
     return chunks
 
 def get_vectorstore(chunks):
@@ -43,4 +44,9 @@ def main():
     raw_text = get_text_file_content(txt_files)
     chunks = get_text_chunks(raw_text)
     vectorstore = get_vectorstore(chunks)
-    return vectorstore
+    conversation_chain = get_conversation_chain(vectorstore)
+    query = "What are some of Rehaan Raha's funniest escapades?"
+
+    print(conversation_chain.run(question = query))
+    
+main()

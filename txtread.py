@@ -6,8 +6,10 @@ from langchain.vectorstores import ElasticVectorSearch,Pinecone,Weaviate,FAISS
 from langchain.chat_models import ChatOpenAI
 from langchain.memory import ConversationBufferMemory
 from langchain.chains import ConversationalRetrievalChain
+from langchain.chains import LLMChain
+from langchain import PromptTemplate
 import openai
-
+from langchain.chains.conversational_retrieval.prompts import QA_PROMPT
 openai.api_key = os.environ["OPENAI_API_KEY"]
 
 def get_text_file_content(txt_files):
@@ -33,8 +35,8 @@ def get_vectorstore(chunks):
     return vectorstore
 
 def get_conversation_chain(vectorstore):
-    llm = ChatOpenAI()
-    memory = ConversationBufferMemory(memory_key="ChatHistory",return_messages=True)
+    llm = ChatOpenAI(temperature=0)
+    memory = ConversationBufferMemory(memory_key="ChatHistory",return_messages=True,output_key="answer")
     conversation_chain = ConversationalRetrievalChain.from_llm(llm=llm,retriever=vectorstore.as_retriever(),memory=memory)
     return conversation_chain
 
@@ -46,7 +48,15 @@ def main():
     vectorstore = get_vectorstore(chunks)
     conversation_chain = get_conversation_chain(vectorstore)
     query = "What are some of Rehaan Raha's funniest escapades?"
-    chat_history = [] # Add this line if there's no chat history yet.
-    conversation_chain.run(chat_history=chat_history)
-    
+    chat_history = []  # Add this line if there's no chat history yet.
+    response = conversation_chain.run(question=query,chat_history=chat_history)
+    print(response)
+
+def LangChainTest():
+    chat = ChatOpenAI(temperature=0)
+    prompt_template = "Tell me a {adjective} joke"
+    llm_chain = LLMChain(llm=chat, prompt=PromptTemplate.from_template(prompt_template))
+
+    print(llm_chain.run({"adjective": "corny"}))
+
 main()

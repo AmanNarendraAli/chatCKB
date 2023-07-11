@@ -48,6 +48,7 @@ def main():
     vectorstore = get_vectorstore(chunks)
     conversation_chain = get_conversation_chain(vectorstore)
     query = "What are some of Rehaan Raha's funniest escapades?"
+<<<<<<< HEAD
     chat_history = []  # Add this line if there's no chat history yet.
     response = conversation_chain.run(question=query,chat_history=chat_history)
     print(response)
@@ -60,3 +61,9 @@ def LangChainTest():
     print(llm_chain.run({"adjective": "corny"}))
 
 main()
+=======
+    chat_history = [] # Add this line if there's no chat history yet.
+    conversation_chain.run(chat_history=chat_history, question=query)
+    
+main()
+>>>>>>> 4f1bd8bd25420caf1014b52e590a7ba19dc111fe

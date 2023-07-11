@@ -46,6 +46,7 @@ def main():
     vectorstore = get_vectorstore(chunks)
     conversation_chain = get_conversation_chain(vectorstore)
     query = "What are some of Rehaan Raha's funniest escapades?"
-    conversation_chain.run(prompt=query)
+    chat_history = [] # Add this line if there's no chat history yet.
+    conversation_chain.run(chat_history=chat_history)
     
 main()

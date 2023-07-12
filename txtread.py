@@ -9,7 +9,7 @@ from langchain.chains import ConversationalRetrievalChain
 from langchain.chains import LLMChain
 from langchain import PromptTemplate
 import openai
-from langchain.chains.conversational_retrieval.prompts import QA_PROMPT
+
 
 openai.api_key = os.environ["OPENAI_API_KEY"]
 

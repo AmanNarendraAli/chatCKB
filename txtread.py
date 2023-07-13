@@ -43,7 +43,7 @@ def get_conversation_chain(vectorstore):
 
 
 def main():
-    txt_files = ["testdoc.txt"]
+    txt_files = ["converted.txt"]
     raw_text = get_text_file_content(txt_files)
     chunks = get_text_chunks(raw_text)
     vectorstore = get_vectorstore(chunks)

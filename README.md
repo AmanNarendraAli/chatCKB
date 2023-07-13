@@ -113,4 +113,10 @@ Vir Khanna: [@virkhanna](https://instagram.com/virkhanna)
 
 Vir Khanna: [@vir_khanna](https://youtube.com/@vir_khanna)
 
+### LinkedIn:
+
+[Vir Khanna](https://linkedin.com/in/virkhanna/)
+
+[Aman Ali](https://www.linkedin.com/in/amannarendraali/)
+
 ### You can also contact CK Birla directly if needed.

@@ -25,31 +25,34 @@ def get_pdfs():
     # compile all the PDF filenames:
     pdfFiles = []
 
-# a nice stroll through the folder, innit:
-    for root, dirs, filenames in os.walk(os.getcwd()):
+    # specify the path of your 'ckbDocs' subdirectory:
+    ckbDocs_path = os.path.join(os.getcwd(), 'ckbDocs')
+
+    # a nice stroll through the 'ckbDocs' folder:
+    for root, dirs, filenames in os.walk(ckbDocs_path):
         for filename in filenames:
             if filename.lower().endswith('.pdf') and filename!="allminutes.pdf":
                 pdfFiles.append(os.path.join(root, filename))
 
-# sort the list; initiate writer obj:
+    # sort the list; initiate writer obj:
     pdfFiles.sort(key = str.lower)
     pdfWriter = PyPDF2.PdfWriter()
 
-# flashy display:
+    # flashy display:
     print('{}\n'.format(len(pdfFiles)))
     for i in pdfFiles:
         print(i)
 
-# Loop through all the PDF files.
+    # Loop through all the PDF files.
     for filename in pdfFiles:
         pdfFileObj = open(filename, 'rb')
         pdfReader = PyPDF2.PdfReader(pdfFileObj)
-    # Loop through all the pages (except the first) and add them.
+        # Loop through all the pages (except the first) and add them.
         for pageNum in range(0, len(pdfReader.pages)):
             pageObj = pdfReader.pages[pageNum]
             pdfWriter.add_page(pageObj)
 
-# Save the resulting PDF to a file.
+    # Save the resulting PDF to a file.
     pdfOutput = open('allminutes.pdf', 'wb')
     pdfWriter.write(pdfOutput)
     pdfOutput.close()

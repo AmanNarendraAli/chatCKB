@@ -97,16 +97,16 @@ Vir Khanna: virkhanna2003@gmail.com
 
 ### GitHub:
 
-Aman Ali: [AmanNarendraAli] (https://github.com/AmanNarendraAli)
+Aman Ali: [AmanNarendraAli](https://github.com/AmanNarendraAli)
 
-Vir Khanna: [v-khanna] (https://github.com/v-khanna)
+Vir Khanna: [v-khanna](https://github.com/v-khanna)
 
 Raise an issue on the repository
 
 ### Instagram:
 
-Aman Narendra Ali: [@amannali] (instagram.com/amannali)
+Aman Narendra Ali: [@amannali](instagram.com/amannali)
 
-Vir Khanna: [@virkhanna] (instagram.com/virkhanna)
+Vir Khanna: [@virkhanna](instagram.com/virkhanna)
 
 ### You can also contact CK Birla directly if needed.

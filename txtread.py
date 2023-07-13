@@ -86,8 +86,6 @@ def get_conversation_chain(vectorstore):
 def main():
     pdf_docs = get_pdfs()
     raw_text = read_pdf("allminutes.pdf")
-    txt_files = ["converted.txt"]
-    raw_text = get_text_file_content(txt_files)
     chunks = get_text_chunks(raw_text)
     vectorstore = get_vectorstore(chunks)
     conversation_chain = get_conversation_chain(vectorstore)

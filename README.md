@@ -38,21 +38,29 @@ Ensure you have Python installed (Python 3.6 or newer is recommended). You'll al
 ## Prerequisites
 
 Clone the repository: git clone https://github.com/AmanNarendraAli/ChatCKB.git
+
 Navigate into the cloned repository: cd ChatCKB
+
 Install the necessary packages using pip: pip install -r requirements.txt
 
 ## Environment Setup
 
-Set up your OpenAI API key as an environment variable in your operating system. For Unix-based systems, you can add the following line to your .bashrc or .bash_profile:
+Set up your OpenAI API key as an environment variable in your operating system.
+
+For Unix-based systems, you can add the following line to your .bashrc or .bash_profile:
+
 export OPENAI_API_KEY='your-api-key'
 
 Replace 'your-api-key' with your actual OpenAI API key.
 
 ## Usage
 
-ChatCKB provides a conversational interface to interact with the user. Upon execution, it will prompt you to enter your question. Here are some examples:
+ChatCKB provides a conversational interface to interact with the user. Upon execution, it will prompt you to enter your question. 
+
+Here are some examples:
 
 "What is the company's mission as stated in document X?"
+
 "Can you summarise the main points from document Y?"
 
 Remember to be clear and specific with your questions to get the most accurate responses.
@@ -66,8 +74,11 @@ For any additional questions, please refer to the Contact section.
 We welcome contributions from everyone. To maintain code consistency, we request you to follow these guidelines:
 
 Use clear, descriptive commit messages. [Refer to our commit messages for example]
+
 Follow the PEP8 style guide for Python code.
+
 Include comments and docstrings for functions and classes.
+
 To propose new features or improvements, please create a new issue on GitHub detailing your proposal.
 
 ## License
@@ -81,20 +92,21 @@ For further information or queries regarding ChatCKB, feel free to contact us vi
 ### Email:
 
 Aman Narendra Ali: amannarendraali@gmail.com
+
 Vir Khanna: virkhanna2003@gmail.com
 
 ### GitHub:
 
-Aman Ali:
-Username: AmanNarendraAli (https://github.com/AmanNarendraAli)
+Aman Ali: [AmanNarendraAli] (https://github.com/AmanNarendraAli)
 
-Vir Khanna:
-Username: v-khanna (https://github.com/v-khanna)
+Vir Khanna: [v-khanna] (https://github.com/v-khanna)
 
 Raise an issue on the repository
 
 ### Instagram:
-Aman Narendra Ali: @amannali
-Vir Khanna: @virkhanna
+
+Aman Narendra Ali: [@amannali] (instagram.com/amannali)
+
+Vir Khanna: [@virkhanna] (instagram.com/virkhanna)
 
 ### You can also contact CK Birla directly if needed.

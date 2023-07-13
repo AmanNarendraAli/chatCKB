@@ -73,7 +73,7 @@ For any additional questions, please refer to the Contact section.
 
 We welcome contributions from everyone. To maintain code consistency, we request you to follow these guidelines:
 
-Use clear, descriptive commit messages. [Refer to our commit messages for example]
+Use clear, descriptive commit messages. Refer to our commit messages for examples of what your clear, descriptive commit messages should look like.
 
 Follow the PEP8 style guide for Python code.
 

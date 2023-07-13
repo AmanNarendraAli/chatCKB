@@ -28,10 +28,10 @@ ChatCKB is a unique twist on OpenAI's advanced AI model, ChatGPT. Specifically t
 ## Setup
 Ensure you have Python installed (Python 3.6 or newer is recommended). You'll also need the following Python packages which can be installed via pip:
 
-**os**
-**PyPDF2**
-**langchain**
-**openai**
+1. **os**
+2. **PyPDF2**
+3. **langchain**
+4. **openai**
 
 ## Prerequisites
 

@@ -105,8 +105,12 @@ Raise an issue on the repository
 
 ### Instagram:
 
-Aman Narendra Ali: [@amannali](https://instagram.com/amannali)
+Aman Narendra Ali: [@amannnali](https://instagram.com/amannnali)
 
 Vir Khanna: [@virkhanna](https://instagram.com/virkhanna)
+
+### Youtube:
+
+Vir Khanna: [@vir_khanna](https://youtube.com/@vir_khanna)
 
 ### You can also contact CK Birla directly if needed.

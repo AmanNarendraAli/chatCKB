@@ -1,5 +1,5 @@
 import os
-from PyPDF2 import PdfReader 
+import PyPDF2
 from langchain.embeddings.openai import OpenAIEmbeddings
 from langchain.text_splitter import CharacterTextSplitter
 from langchain.vectorstores import ElasticVectorSearch,Pinecone,Weaviate,FAISS
@@ -12,6 +12,47 @@ import openai
 
 
 openai.api_key = os.environ["OPENAI_API_KEY"]
+
+def read_pdf(pdf_name):
+    text = ""
+    pdfFileObj = open(pdf_name,'rb')
+    pdf_reader=PyPDF2.PdfReader(pdfFileObj)
+    for page in pdf_reader.pages:
+        text += page.extract_text()
+    return text
+
+def get_pdfs():
+    # compile all the PDF filenames:
+    pdfFiles = []
+
+# a nice stroll through the folder, innit:
+    for root, dirs, filenames in os.walk(os.getcwd()):
+        for filename in filenames:
+            if filename.lower().endswith('.pdf') and filename!="allminutes.pdf":
+                pdfFiles.append(os.path.join(root, filename))
+
+# sort the list; initiate writer obj:
+    pdfFiles.sort(key = str.lower)
+    pdfWriter = PyPDF2.PdfWriter()
+
+# flashy display:
+    print('{}\n'.format(len(pdfFiles)))
+    for i in pdfFiles:
+        print(i)
+
+# Loop through all the PDF files.
+    for filename in pdfFiles:
+        pdfFileObj = open(filename, 'rb')
+        pdfReader = PyPDF2.PdfReader(pdfFileObj)
+    # Loop through all the pages (except the first) and add them.
+        for pageNum in range(0, len(pdfReader.pages)):
+            pageObj = pdfReader.pages[pageNum]
+            pdfWriter.add_page(pageObj)
+
+# Save the resulting PDF to a file.
+    pdfOutput = open('allminutes.pdf', 'wb')
+    pdfWriter.write(pdfOutput)
+    pdfOutput.close()
 
 def get_text_file_content(txt_files):
     text = ""
@@ -43,8 +84,8 @@ def get_conversation_chain(vectorstore):
 
 
 def main():
-    txt_files = ["testdoc.txt"]
-    raw_text = get_text_file_content(txt_files)
+    pdf_docs = get_pdfs()
+    raw_text = read_pdf("allminutes.pdf")
     chunks = get_text_chunks(raw_text)
     vectorstore = get_vectorstore(chunks)
     conversation_chain = get_conversation_chain(vectorstore)

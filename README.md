@@ -3,6 +3,7 @@
 Authors: Aman Narendra Ali and Vir Khanna
 
 ## Table of Contents
+
 1. About
 2. Features
 3. Installation & Setup
@@ -13,6 +14,7 @@ Authors: Aman Narendra Ali and Vir Khanna
 8. Contact
 
 ## About
+
 ChatCKB is a unique twist on OpenAI's advanced AI model, ChatGPT. Specifically tailored for CK Birla, it has the ability to comprehend and process company documents and answer relevant questions based on this acquired knowledge. The AI is powered by the OpenAI API and LangChain.
 
 ## Features
@@ -47,10 +49,12 @@ export OPENAI_API_KEY='your-api-key'
 Replace 'your-api-key' with your actual OpenAI API key.
 
 ## Usage
+
 ChatCKB provides a conversational interface to interact with the user. Upon execution, it will prompt you to enter your question. Here are some examples:
 
 "What is the company's mission as stated in document X?"
 "Can you summarise the main points from document Y?"
+
 Remember to be clear and specific with your questions to get the most accurate responses.
 
 ## FAQs
@@ -74,15 +78,23 @@ ChatCKB is currently open-source and free for non-commercial use. For commercial
 
 For further information or queries regarding ChatCKB, feel free to contact us via the following methods:
 
-Email:
+### Email:
 
 Aman Narendra Ali: amannarendraali@gmail.com
 Vir Khanna: virkhanna2003@gmail.com
-GitHub:
+
+### GitHub:
+
+Aman Ali:
+Username: AmanNarendraAli (https://github.com/AmanNarendraAli)
+
+Vir Khanna:
+Username: v-khanna (https://github.com/v-khanna)
 
 Raise an issue on the repository
-Instagram:
 
+### Instagram:
 Aman Narendra Ali: @amannali
 Vir Khanna: @virkhanna
-You can also contact CK Birla directly if needed.
+
+### You can also contact CK Birla directly if needed.

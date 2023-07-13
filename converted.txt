@@ -1,0 +1,103 @@
+Vir Khanna
+
+Davis, CA, US
+
+vkhanna@ucdavis.edu
+
++1 (650) 515 6435
+
+in/virkhanna
+
+SUMMARY
+
+Accomplished Software Engineer with a proven ability in Machine Learning, Natural Language Processing, and efficient data management using 
+Node.js and Python. Track record includes developing a sophisticated AI Chatbot at CK Birla Healthcare and a strategic price comparison tool at 
+Zomato, both contributing to significant operational improvements. Renowned for enhancing cross-functional collaborations and driving project 
+success. Eager to apply these skills to tackle complex problems and drive innovation in a forward-thinking environment.
+
+EXPERIENCE
+
+Machine Learning Engineer
+CK Birla Group
+• Orchestrated the design and deployment of an AI Chatbot using advanced Natural Language Processing (NLP) and Deep Learning models, 
+significantly improving access to company information and reducing data retrieval time. 
+• Leveraged Reinforcement Learning for continuous AI Chatbot optimization, achieving a 30% increase in query handling efficiency. 
+• Championed Machine Learning Ops (MLOps) practices, seamlessly integrating and scaling AI models across the organization's tech stack. 
+• Conducted AI workshops and led a cross-functional team, fostering a culture of tech-savviness and knowledge sharing within the company.
+
+July 2023 - September 2023
+
+,
+
+Gurugram, Haryana, India
+
+Software Developer intern
+Zomato
+• Developed an innovative price comparison tool that aggregates menu prices across major Indian food delivery platforms, enhancing Zomato's 
+market competitiveness. 
+• Employed advanced web scraping techniques for large-scale data extraction, enhancing the tool's accuracy and reliability. 
+• Optimized tool performance with efficient data structures and algorithms, significantly improving data processing speed and accuracy. 
+• Seamlessly integrated this tool into Zomato's existing system architecture, increasing the strategic efficiency of the Menu and Catalog Team
+
+July 2022 - August 2022
+
+Software Developer Intern
+MakeMyTrip
+• Spearheaded the successful migration of user data to the 'My Orders' page's ACME tab, enhancing user experience and increasing customer data 
+accessibility. 
+• Employed Node.js and Python, along with various libraries, to streamline data transfer processes, resulting in improved performance and 
+operational efficiency. 
+• Crafted sophisticated data pipelines and APIs, fostering secure, accurate, and timely data flow between different components of the system.
+• Collaborated with cross-functional teams, ensuring the seamless integration of the new data migration solution with existing MakeMyTrip systems, 
+bolstering the company's overall operational workflow.
+
+June 2019 - August 2019
+
+Founder and Developer
+EdSync
+• Started a free online peer tutoring service where high school seniors could teach middle school students on challenging topics before their exams. 
+• Built our website using WordPress, HTML, CSS and PHP to display content, perform user registration and authentication 
+• Integrated cloud-based scheduling system on Calendly to conduct virtual classes on Zoom and Google Meets. 
+• Tutored 100+ students in the first month of operations with a team of 20+ teachers.
+
+April 2020 - September 2021
+
+,
+
+New Delhi, Delhi, India
+
+January 2023 - Present
+
+,
+
+Davis, California, USA
+
+Producer & Performer
+Stand-up Comedy Club @ UCDavis (StUCC)
+• I also do Stand-up Comedy! 
+• Watch my bits - youtube.com/@vir_khanna
+
+EDUCATION
+
+Computer Science
+University of California • US, California, Davis • 2025 • 3.8
+
+COURSEWORK
+
+Algorithms
+
+Data Structures
+
+Operating Systems
+
+Theory Of Computation
+
+Discrete Mathematics
+
+Object-Oriented Programming
+
+N/A
+
+N/A
+
+

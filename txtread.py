@@ -21,7 +21,7 @@ def read_pdf(pdf_name):
     pdf_reader=PyPDF2.PdfReader(pdfFileObj)
     for page in pdf_reader.pages:
         text += page.extract_text()
-    print(text)
+    #print(text)
     return text
 
 def get_pdfs():

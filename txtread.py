@@ -9,7 +9,8 @@ from langchain.chains import ConversationalRetrievalChain
 from langchain.chains import LLMChain
 from langchain import PromptTemplate
 import openai
-
+import requests
+from bs4 import BeautifulSoup
 
 openai.api_key = os.environ["OPENAI_API_KEY"]
 
@@ -68,8 +69,8 @@ def get_text_file_content(txt_files):
 def get_text_chunks(raw_text):
     splitter = CharacterTextSplitter(
         separator = "\n",
-        chunk_size = 1500,
-        chunk_overlap = 300,
+        chunk_size = 1000,
+        chunk_overlap = 100,
         length_function = len
     )
     chunks = splitter.split_text(raw_text)
@@ -81,15 +82,31 @@ def get_vectorstore(chunks):
     return vectorstore
 
 def get_conversation_chain(vectorstore):
-    llm = ChatOpenAI(temperature=0.4)
+    llm = ChatOpenAI(temperature=0.6)
     memory = ConversationBufferMemory(llm = llm, memory_key='chat_history', return_messages=True, output_key='answer')
     conversation_chain = ConversationalRetrievalChain.from_llm(llm=llm, retriever=vectorstore.as_retriever(),memory=memory)
     return conversation_chain
+
+def get_text_from_url(url):
+    # Send HTTP request to URL
+    response = requests.get(url)
+
+    # Parse HTML and save to BeautifulSoup object
+    soup = BeautifulSoup(response.text, "html.parser")
+
+    # Extract text from the parsed HTML
+    urltext = soup.get_text()
+
+    # Return the text
+    return urltext
 
 
 def main():
     pdf_docs = get_pdfs()
     raw_text = read_pdf("allminutes.pdf")
+    url = input('Enter the URL: ')
+    raw_text += get_text_from_url(url)
+    #    raw_text = get_text_from_url(url)
     chunks = get_text_chunks(raw_text)
     vectorstore = get_vectorstore(chunks)
     conversation_chain = get_conversation_chain(vectorstore)

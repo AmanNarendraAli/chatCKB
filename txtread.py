@@ -45,9 +45,9 @@ def get_pdfs():
     pdfWriter = PyPDF2.PdfWriter()
 
     # flashy display:
-    print('{}\n'.format(len(pdfFiles)))
-    for i in pdfFiles:
-        print(i)
+    #print('{}\n'.format(len(pdfFiles)))
+    #for i in pdfFiles:
+        #print(i)
 
     # Loop through all the PDF files.
     for filename in pdfFiles:

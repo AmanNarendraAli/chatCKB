@@ -19,6 +19,7 @@ def read_pdf(pdf_name):
     pdf_reader=PyPDF2.PdfReader(pdfFileObj)
     for page in pdf_reader.pages:
         text += page.extract_text()
+    print(text)
     return text
 
 def get_pdfs():
@@ -67,8 +68,8 @@ def get_text_file_content(txt_files):
 def get_text_chunks(raw_text):
     splitter = CharacterTextSplitter(
         separator = "\n",
-        chunk_size = 1000,
-        chunk_overlap = 100,
+        chunk_size = 1500,
+        chunk_overlap = 300,
         length_function = len
     )
     chunks = splitter.split_text(raw_text)
@@ -80,7 +81,7 @@ def get_vectorstore(chunks):
     return vectorstore
 
 def get_conversation_chain(vectorstore):
-    llm = ChatOpenAI(temperature=0.6)
+    llm = ChatOpenAI(temperature=0.4)
     memory = ConversationBufferMemory(llm = llm, memory_key='chat_history', return_messages=True, output_key='answer')
     conversation_chain = ConversationalRetrievalChain.from_llm(llm=llm, retriever=vectorstore.as_retriever(),memory=memory)
     return conversation_chain

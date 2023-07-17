@@ -11,6 +11,7 @@ from langchain import PromptTemplate
 import openai
 import requests
 from bs4 import BeautifulSoup
+import validators
 
 openai.api_key = os.environ["OPENAI_API_KEY"]
 
@@ -104,13 +105,20 @@ def get_text_from_url(url):
 def main():
     pdf_docs = get_pdfs()
     raw_text = read_pdf("allminutes.pdf")
-    url = input('Enter the URL: ')
-    raw_text += get_text_from_url(url)
-    #    raw_text = get_text_from_url(url)
+    input_string = input('Enter a URL or your question: ')
+
+    # Check if input string is a URL
+    if validators.url(input_string):
+        # If it's a URL, extract the text from the webpage
+        raw_text += get_text_from_url(input_string)
+        query = input("Enter your question: ")
+    else:
+        # If it's not a URL, consider it as the query
+        query = input_string
+
     chunks = get_text_chunks(raw_text)
     vectorstore = get_vectorstore(chunks)
     conversation_chain = get_conversation_chain(vectorstore)
-    query = input("Enter your question: ")
     chat_history = []  # Add this line if there's no chat history yet.
     response = conversation_chain.run({"question":query,"chat_history":chat_history})
     print(response)

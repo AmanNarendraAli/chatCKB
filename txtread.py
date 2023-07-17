@@ -13,17 +13,20 @@ import requests
 from bs4 import BeautifulSoup
 import validators
 
+# Set OpenAI API key from environment variable
 openai.api_key = os.environ["OPENAI_API_KEY"]
 
+# Function to read the text from a PDF file
 def read_pdf(pdf_name):
     text = ""
     pdfFileObj = open(pdf_name,'rb')
     pdf_reader=PyPDF2.PdfReader(pdfFileObj)
+    # Loop over the pages in the PDF and extract the text
     for page in pdf_reader.pages:
         text += page.extract_text()
-    #print(text)
     return text
 
+# Function to get all the PDF files in a directory
 def get_pdfs():
     # compile all the PDF filenames:
     pdfFiles = []
@@ -60,6 +63,7 @@ def get_pdfs():
     pdfWriter.write(pdfOutput)
     pdfOutput.close()
 
+# Function to get the text content from a list of text files
 def get_text_file_content(txt_files):
     text = ""
     for txt_file in txt_files:
@@ -67,6 +71,7 @@ def get_text_file_content(txt_files):
             text += file.read()
     return text
 
+# Function to split the text into chunks
 def get_text_chunks(raw_text):
     splitter = CharacterTextSplitter(
         separator = "\n",
@@ -77,17 +82,20 @@ def get_text_chunks(raw_text):
     chunks = splitter.split_text(raw_text)
     return chunks
 
+# Function to generate a vector store from a list of text chunks
 def get_vectorstore(chunks):
     embeddings = OpenAIEmbeddings()
     vectorstore = FAISS.from_texts(texts = chunks, embedding = embeddings)
     return vectorstore
 
+# Function to generate a conversation chain from a vector store
 def get_conversation_chain(vectorstore):
     llm = ChatOpenAI(temperature=0.6)
     memory = ConversationBufferMemory(llm = llm, memory_key='chat_history', return_messages=True, output_key='answer')
     conversation_chain = ConversationalRetrievalChain.from_llm(llm=llm, retriever=vectorstore.as_retriever(),memory=memory)
     return conversation_chain
 
+# Function to get the text from a URL
 def get_text_from_url(url):
     # Send HTTP request to URL
     response = requests.get(url)
@@ -101,10 +109,13 @@ def get_text_from_url(url):
     # Return the text
     return urltext
 
-
+# Main function to run the application
 def main():
+    # Get all the PDFs
     pdf_docs = get_pdfs()
+    # Read the text from the combined PDF
     raw_text = read_pdf("allminutes.pdf")
+    # Get the user's input
     input_string = input('Enter your question: ')
 
     # Check if input string is a URL
@@ -116,13 +127,19 @@ def main():
         # If it's not a URL, consider it as the query
         query = input_string
 
+    # Split the raw text into chunks
     chunks = get_text_chunks(raw_text)
+    # Generate a vector store from the chunks
     vectorstore = get_vectorstore(chunks)
+    # Generate a conversation chain from the vector store
     conversation_chain = get_conversation_chain(vectorstore)
     chat_history = []  # Add this line if there's no chat history yet.
+    # Run the conversation chain with the user's query and the chat history
     response = conversation_chain.run({"question":query,"chat_history":chat_history})
+    # Print the response
     print(response)
 
+# Function to test the LangChain chat functionality
 def LangChainTest():
     chat = ChatOpenAI(temperature=1)
     prompt_template = "Tell me a {adjective} joke"
@@ -130,4 +147,5 @@ def LangChainTest():
 
     print(llm_chain.run({"adjective": "corny"}))
 
+# Run the main function
 main()

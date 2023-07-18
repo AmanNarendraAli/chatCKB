@@ -145,7 +145,18 @@ def main():
 
     # Load the chat history
     chat_history = load_chat_history()
+    query = "Introduce yourself as ChatCKB, a chatbot developed by Vir Khanna and Aman Ali under Kites.ai. Say that you can answer any question about Kites. Be friendly."
+    response = conversation_chain.run({"question":query,"chat_history":chat_history})
 
+        # Add the new conversation to the chat history
+    chat_history.append({"question": query, "response": response})
+
+        # Save the updated chat history
+    save_chat_history(chat_history)
+
+        # Print the response
+    print(response)
+    
     while True:
         # Get the user's input
         input_string = input('Enter your question (or type "quit" to exit): ')
@@ -174,7 +185,13 @@ def main():
         # Print the response
         print(response)
 
+# Function to test the LangChain chat functionality
+def LangChainTest():
+    chat = ChatOpenAI(temperature=1)
+    prompt_template = "Tell me a {adjective} joke"
+    llm_chain = LLMChain(llm=chat, prompt=PromptTemplate.from_template(prompt_template))
 
+    print(llm_chain.run({"adjective": "corny"}))
 
 # Run the main function
 main()

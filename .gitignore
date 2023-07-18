@@ -1,3 +1,4 @@
 *.pdf
 ckbDocs/*.pdf
 ckbDocs
+chat_history.json

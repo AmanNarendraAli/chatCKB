@@ -110,14 +110,6 @@ def get_text_from_url(url):
     # Return the text
     return urltext
 
-# Function to test the LangChain chat functionality
-def LangChainTest():
-    chat = ChatOpenAI(temperature=1)
-    prompt_template = "Tell me a {adjective} joke"
-    llm_chain = LLMChain(llm=chat, prompt=PromptTemplate.from_template(prompt_template))
-
-    print(llm_chain.run({"adjective": "corny"}))
-
 def save_chat_history(chat_history, filename='chat_history.json'):
     with open(filename, 'w') as file:
         json.dump(chat_history, file)
@@ -185,13 +177,6 @@ def main():
         # Print the response
         print(response)
     save_chat_history([])
-# Function to test the LangChain chat functionality
-def LangChainTest():
-    chat = ChatOpenAI(temperature=1)
-    prompt_template = "Tell me a {adjective} joke"
-    llm_chain = LLMChain(llm=chat, prompt=PromptTemplate.from_template(prompt_template))
-
-    print(llm_chain.run({"adjective": "corny"}))
 
 # Run the main function
 main()

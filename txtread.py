@@ -12,6 +12,7 @@ import openai
 import requests
 from bs4 import BeautifulSoup
 import validators
+import json
 
 # Set OpenAI API key from environment variable
 openai.api_key = os.environ["OPENAI_API_KEY"]
@@ -109,37 +110,6 @@ def get_text_from_url(url):
     # Return the text
     return urltext
 
-# Main function to run the application
-def main():
-    # Get all the PDFs
-    pdf_docs = get_pdfs()
-    # Read the text from the combined PDF
-    raw_text = read_pdf("allminutes.pdf")
-    # Get the user's input
-    input_string = input('Enter your question: ')
-
-    # Check if input string is a URL
-    if validators.url(input_string):
-        # If it's a URL, extract the text from the webpage
-        raw_text += get_text_from_url(input_string)
-        query = input("Actually enter your question: ")
-    else:
-        # If it's not a URL, consider it as the query
-        query = input_string
-
-    # Split the raw text into chunks
-    chunks = get_text_chunks(raw_text)
-    # Generate a vector store from the chunks
-    vectorstore = get_vectorstore(chunks)
-    # Generate a conversation chain from the vector store
-    conversation_chain = get_conversation_chain(vectorstore)
-    chat_history = []  # Add this line if there's no chat history yet.
-    # Run the conversation chain with the user's query and the chat history
-    response = conversation_chain.run({"question":query,"chat_history":chat_history})
-    print("gittest")
-    # Print the response
-    print(response)
-
 # Function to test the LangChain chat functionality
 def LangChainTest():
     chat = ChatOpenAI(temperature=1)
@@ -147,6 +117,64 @@ def LangChainTest():
     llm_chain = LLMChain(llm=chat, prompt=PromptTemplate.from_template(prompt_template))
 
     print(llm_chain.run({"adjective": "corny"}))
+
+def save_chat_history(chat_history, filename='chat_history.json'):
+    with open(filename, 'w') as file:
+        json.dump(chat_history, file)
+
+def load_chat_history(filename='chat_history.json'):
+    try:
+        with open(filename, 'r') as file:
+            return json.load(file)
+    except FileNotFoundError:
+        return []  # Return an empty list if the file doesn't exist
+
+
+def main():
+    # Get all the PDFs
+    pdf_docs = get_pdfs()
+    # Read the text from the combined PDF
+    raw_text = read_pdf("allminutes.pdf")
+
+    # Split the raw text into chunks
+    chunks = get_text_chunks(raw_text)
+    # Generate a vector store from the chunks
+    vectorstore = get_vectorstore(chunks)
+    # Generate a conversation chain from the vector store
+    conversation_chain = get_conversation_chain(vectorstore)
+
+    # Load the chat history
+    chat_history = load_chat_history()
+
+    while True:
+        # Get the user's input
+        input_string = input('Enter your question (or type "quit" to exit): ')
+
+        if input_string.lower() == 'quit':
+            break
+
+        # Check if input string is a URL
+        if validators.url(input_string):
+            # If it's a URL, extract the text from the webpage
+            raw_text += get_text_from_url(input_string)
+            query = input("Actually enter your question: ")
+        else:
+            # If it's not a URL, consider it as the query
+            query = input_string
+
+        # Run the conversation chain with the user's query and the chat history
+        response = conversation_chain.run({"question":query,"chat_history":chat_history})
+
+        # Add the new conversation to the chat history
+        chat_history.append({"question": query, "response": response})
+
+        # Save the updated chat history
+        save_chat_history(chat_history)
+
+        # Print the response
+        print(response)
+
+
 
 # Run the main function
 main()

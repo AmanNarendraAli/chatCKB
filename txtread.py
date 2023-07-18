@@ -136,6 +136,7 @@ def main():
     chat_history = []  # Add this line if there's no chat history yet.
     # Run the conversation chain with the user's query and the chat history
     response = conversation_chain.run({"question":query,"chat_history":chat_history})
+    print("gittest")
     # Print the response
     print(response)
 

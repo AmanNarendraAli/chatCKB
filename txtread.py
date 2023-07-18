@@ -184,7 +184,7 @@ def main():
 
         # Print the response
         print(response)
-
+    save_chat_history([])
 # Function to test the LangChain chat functionality
 def LangChainTest():
     chat = ChatOpenAI(temperature=1)

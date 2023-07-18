@@ -91,7 +91,7 @@ def get_vectorstore(chunks):
 
 # Function to generate a conversation chain from a vector store
 def get_conversation_chain(vectorstore):
-    llm = ChatOpenAI(temperature=0.4)
+    llm = ChatOpenAI(temperature=1)
     memory = ConversationBufferMemory(llm = llm, memory_key='chat_history', return_messages=True, output_key='answer')
     conversation_chain = ConversationalRetrievalChain.from_llm(llm=llm, retriever=vectorstore.as_retriever(),memory=memory)
     return conversation_chain
@@ -180,3 +180,5 @@ def main():
 
 # Run the main function
 main()
+
+#testcomment

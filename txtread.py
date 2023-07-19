@@ -45,24 +45,22 @@ def get_pdfs():
     pdfFiles.sort(key = str.lower)
     pdfWriter = PyPDF2.PdfWriter()
 
-    # flashy display:
-    #print('{}\n'.format(len(pdfFiles)))
-    #for i in pdfFiles:
-        #print(i)
-
     # Loop through all the PDF files.
-    for filename in pdfFiles:
-        pdfFileObj = open(filename, 'rb')
-        pdfReader = PyPDF2.PdfReader(pdfFileObj)
-        # Loop through all the pages (except the first) and add them.
-        for pageNum in range(0, len(pdfReader.pages)):
-            pageObj = pdfReader.pages[pageNum]
-            pdfWriter.add_page(pageObj)
+    if pdfFiles:
+        for filename in pdfFiles:
+            pdfFileObj = open(filename, 'rb')
+            pdfReader = PyPDF2.PdfReader(pdfFileObj)
+            # Loop through all the pages (except the first) and add them.
+            for pageNum in range(0, len(pdfReader.pages)):
+                pageObj = pdfReader.pages[pageNum]
+                pdfWriter.add_page(pageObj)
 
-    # Save the resulting PDF to a file.
-    pdfOutput = open('allminutes.pdf', 'wb')
-    pdfWriter.write(pdfOutput)
-    pdfOutput.close()
+        # Save the resulting PDF to a file.
+        pdfOutput = open('allminutes.pdf', 'wb')
+        pdfWriter.write(pdfOutput)
+        pdfOutput.close()
+
+    return pdfFiles  # Always return pdfFiles, even if it's an empty list
 
 # Function to get the text content from a list of text files
 def get_text_file_content(txt_files):
@@ -76,8 +74,8 @@ def get_text_file_content(txt_files):
 def get_text_chunks(raw_text):
     splitter = CharacterTextSplitter(
         separator = "\n",
-        chunk_size = 1500,
-        chunk_overlap = 300,
+        chunk_size = 1000,
+        chunk_overlap = 100,
         length_function = len
     )
     chunks = splitter.split_text(raw_text)
@@ -91,7 +89,7 @@ def get_vectorstore(chunks):
 
 # Function to generate a conversation chain from a vector store
 def get_conversation_chain(vectorstore):
-    llm = ChatOpenAI(temperature=1)
+    llm = ChatOpenAI(temperature=0.4)
     memory = ConversationBufferMemory(llm = llm, memory_key='chat_history', return_messages=True, output_key='answer')
     conversation_chain = ConversationalRetrievalChain.from_llm(llm=llm, retriever=vectorstore.as_retriever(),memory=memory)
     return conversation_chain
@@ -117,16 +115,36 @@ def save_chat_history(chat_history, filename='chat_history.json'):
 def load_chat_history(filename='chat_history.json'):
     try:
         with open(filename, 'r') as file:
-            return json.load(file)
+            file_content = file.read()
+            if not file_content:
+                return []  # The file is empty, return an empty list
+            try:
+                return json.loads(file_content)  # Try to parse the JSON
+            except json.JSONDecodeError:
+                return []  # The file doesn't contain valid JSON, return an empty list
     except FileNotFoundError:
-        return []  # Return an empty list if the file doesn't exist
+        return []  # The file doesn't exist, return an empty list
 
 
 def main():
     # Get all the PDFs
     pdf_docs = get_pdfs()
-    # Read the text from the combined PDF
-    raw_text = read_pdf("allminutes.pdf")
+
+    # Check if there are any PDFs in the ckbDocs folder
+    if len(pdf_docs) == 0:
+        print("No PDF files found in ckbDocs folder. Please enter a URL to proceed.")
+        url = input("Enter the URL: ")
+
+        # Check if input string is a valid URL
+        if validators.url(url):
+            # If it's a URL, extract the text from the webpage
+            raw_text = get_text_from_url(url)
+        else:
+            print("Invalid URL. Please check your input.")
+            return
+    else:
+        # Read the text from the combined PDF
+        raw_text = read_pdf("allminutes.pdf")
 
     # Split the raw text into chunks
     chunks = get_text_chunks(raw_text)

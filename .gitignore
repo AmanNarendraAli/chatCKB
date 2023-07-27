@@ -2,3 +2,4 @@
 ckbDocs/*.pdf
 ckbDocs
 chat_history.json
+config.py

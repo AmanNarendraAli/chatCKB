@@ -4,9 +4,9 @@ from slack_sdk import WebClient
 from slack_sdk.errors import SlackApiError
 from config import SLACK_BOT_TOKEN, SLACK_SIGNING_SECRET
 from main import handle_single_message
+import os
 
 app = Flask(__name__)
-
 slack_event_adapter = SlackEventAdapter(SLACK_SIGNING_SECRET, "/slack/events", app)
 
 slack_web_client = WebClient(token=SLACK_BOT_TOKEN)

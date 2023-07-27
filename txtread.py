@@ -74,8 +74,8 @@ def get_text_file_content(txt_files):
 def get_text_chunks(raw_text):
     splitter = CharacterTextSplitter(
         separator = "\n",
-        chunk_size = 1000,
-        chunk_overlap = 100,
+        chunk_size = 3000,
+        chunk_overlap = 250,
         length_function = len
     )
     chunks = splitter.split_text(raw_text)

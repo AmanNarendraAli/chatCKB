@@ -1,38 +1,75 @@
 from flask import Flask, request, make_response
-from slackeventsapi import SlackEventAdapter
-from slack_sdk import WebClient
-from slack_sdk.errors import SlackApiError
-from config import SLACK_BOT_TOKEN, SLACK_SIGNING_SECRET
-from main import handle_single_message
+from slack_sdk.signature import SignatureVerifier
+from slack_sdk.web import WebClient
+from slack_sdk.errors import SlackSignatureVerificationError
 import os
+import json
+import validators
+import requests
+from bs4 import BeautifulSoup
+from main import handle_single_message, get_conversation_chain, get_vectorstore, get_text_chunks, read_pdf, get_pdfs, get_text_from_url
 
+# Get the slack token and signing secret from the environment
+slack_token = os.getenv("SLACK_BOT_TOKEN")
+slack_signing_secret = os.getenv("SLACK_SIGNING_SECRET")
+
+# Create a new WebClient - you'll use this to send messages back to Slack
+slack_web_client = WebClient(token=slack_token)
+
+# Create a new SignatureVerifier - you'll use this to verify requests from Slack
+signature_verifier = SignatureVerifier(slack_signing_secret)
+
+# Initialize a Flask app
 app = Flask(__name__)
-slack_event_adapter = SlackEventAdapter(SLACK_SIGNING_SECRET, "/slack/events", app)
 
-slack_web_client = WebClient(token=SLACK_BOT_TOKEN)
+# Global variable to store the conversation chain
+conversation_chain = None
 
-@slack_event_adapter.on("message")
-def handle_message(event_data):
-    message = event_data["event"]
+@app.route('/slack/message_actions', methods=['POST'])
+def message_actions():
+    # Verify the request
+    if not signature_verifier.is_valid_request(request.get_data().decode('utf-8'), request.headers):
+        return make_response("invalid request", 403)
 
-    # Skip bot's own message
-    if message.get('subtype') == 'bot_message':
-        return
+    # Extract the user's message
+    form_json = json.loads(request.form["payload"])
+    user_message = form_json['message']['blocks'][0]['elements'][0]['elements'][0]['text']
 
-    # Get the ID of the channel where the message was sent
-    channel_id = message["channel"]
+    global conversation_chain
+    if conversation_chain is None:
+        # Get all the PDFs
+        pdf_docs = get_pdfs()
 
-    # Get the text of the message that was sent
-    message_text = message.get('text')
+        # Check if there are any PDFs in the ckbDocs folder
+        if len(pdf_docs) == 0:
+            print("No PDF files found in ckbDocs folder. Please enter a URL to proceed.")
+            url = input("Enter the URL: ")
 
-    # Process the message text and get the response
-    response = handle_single_message(message_text)
+            # Check if input string is a valid URL
+            if validators.url(url):
+                # If it's a URL, extract the text from the webpage
+                raw_text = get_text_from_url(url)
+            else:
+                print("Invalid URL. Please check your input.")
+                return
+        else:
+            # Read the text from the combined PDF
+            raw_text = read_pdf("allminutes.pdf")
 
-    # Send the response back to the channel
-    try:
-        slack_web_client.chat_postMessage(channel=channel_id, text=response)
-    except SlackApiError as e:
-        print(f"Error sending message: {e}")
+        # Split the raw text into chunks
+        chunks = get_text_chunks(raw_text)
+        # Generate a vector store from the chunks
+        vectorstore = get_vectorstore(chunks)
+        # Generate a conversation chain from the vector store
+        conversation_chain = get_conversation_chain(vectorstore)
+
+    # Get the response from our bot
+    bot_response = handle_single_message(conversation_chain, user_message)
+
+    # Send the response back to Slack
+    slack_web_client.chat_postMessage(channel=form_json['channel']['id'], text=bot_response)
+
+    return make_response("", 200)
 
 if __name__ == "__main__":
     app.run(port=3000)

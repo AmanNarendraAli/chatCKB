@@ -126,7 +126,7 @@ def load_chat_history(filename='chat_history.json'):
         return []  # The file doesn't exist, return an empty list
 
 
-def handle_single_message(message, chat_history_filename='chat_history.json'):
+def handle_single_message(conversation_chain, message, chat_history_filename='chat_history.json'):
     # Load the chat history
     chat_history = load_chat_history(chat_history_filename)
 
@@ -141,8 +141,6 @@ def handle_single_message(message, chat_history_filename='chat_history.json'):
 
     # Return the response
     return response
-
-
 
 def main():
     # Get all the PDFs
@@ -171,18 +169,11 @@ def main():
     # Generate a conversation chain from the vector store
     conversation_chain = get_conversation_chain(vectorstore)
 
-    # Load the chat history
-    chat_history = load_chat_history()
+    # Start the chat by introducing the bot
     query = "Introduce yourself as ChatCKB, a chatbot developed by Vir Khanna and Aman Ali under Kites.ai. Say that you can answer any question about Kites. Be friendly."
-    response = conversation_chain.run({"question":query,"chat_history":chat_history})
+    response = handle_single_message(conversation_chain, query)
 
-        # Add the new conversation to the chat history
-    chat_history.append({"question": query, "response": response})
-
-        # Save the updated chat history
-    save_chat_history(chat_history)
-
-        # Print the response
+    # Print the response
     print(response)
     
     while True:
@@ -201,18 +192,15 @@ def main():
             # If it's not a URL, consider it as the query
             query = input_string
 
-        # Run the conversation chain with the user's query and the chat history
-        response = conversation_chain.run({"question":query,"chat_history":chat_history})
-
-        # Add the new conversation to the chat history
-        chat_history.append({"question": query, "response": response})
-
-        # Save the updated chat history
-        save_chat_history(chat_history)
+        # Run the handle_single_message function with the user's query and the conversation chain
+        response = handle_single_message(conversation_chain, query)
 
         # Print the response
         print(response)
+
+    # Clear the chat history when the user decides to quit
     save_chat_history([])
 
 # Run the main function
-main()
+if __name__ == "__main__":
+    main()

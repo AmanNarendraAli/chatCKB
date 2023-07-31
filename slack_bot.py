@@ -1,7 +1,9 @@
 from flask import Flask, request, make_response
 from slack_sdk.signature import SignatureVerifier
 from slack_sdk.web import WebClient
-from slack_sdk.errors import SlackSignatureVerificationError
+from slack_sdk.errors import (
+    SlackApiError,
+)  # replace SlackSignatureVerificationError with SlackApiError
 import os
 import json
 import validators

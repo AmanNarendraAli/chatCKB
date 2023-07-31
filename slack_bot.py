@@ -97,5 +97,12 @@ def message_actions():
     return make_response("", 200)
 
 
+# add your route here
+@app.route("/slack/events", methods=["POST"])
+def slack_events():
+    # your handling code here
+    return "ok"
+
+
 if __name__ == "__main__":
     app.run(port=3000)

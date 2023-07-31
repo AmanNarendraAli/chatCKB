@@ -1,10 +1,11 @@
-from flask import Flask, request, make_response
+from flask import Flask, request, make_response, jsonify
 from slack_sdk.signature import SignatureVerifier
 from slack_sdk.web import WebClient
 from slack_sdk.errors import (
     SlackApiError,
 )  # replace SlackSignatureVerificationError with SlackApiError
 import os
+
 import json
 import validators
 import requests
@@ -26,7 +27,8 @@ slack_token = os.getenv("SLACK_BOT_TOKEN")
 slack_signing_secret = os.getenv("SLACK_SIGNING_SECRET")
 
 # Create a new WebClient - you'll use this to send messages back to Slack
-slack_web_client = WebClient(token=slack_token)
+client = WebClient(token=slack_token)
+
 
 # Create a new SignatureVerifier - you'll use this to verify requests from Slack
 signature_verifier = SignatureVerifier(slack_signing_secret)
@@ -90,18 +92,39 @@ def message_actions():
     )
 
     # Send the response back to Slack
-    slack_web_client.chat_postMessage(
-        channel=form_json["channel"]["id"], text=bot_response
-    )
+    client.chat_postMessage(channel=form_json["channel"]["id"], text=bot_response)
 
     return make_response("", 200)
 
 
-# add your route here
+app = Flask(__name__)
+
+
 @app.route("/slack/events", methods=["POST"])
 def slack_events():
-    # your handling code here
-    return "ok"
+    slack_event = request.get_json()
+    if "challenge" in slack_event:
+        return make_response(
+            slack_event["challenge"], 200, {"content_type": "application/json"}
+        )
+
+    if "event" in slack_event:
+        event_type = slack_event["event"]["type"]
+        # Handling Message events
+        if event_type == "message":
+            channel_id = slack_event["event"]["channel"]
+            user = slack_event["event"]["user"]
+            text = slack_event["event"]["text"]
+            if "bot_id" not in slack_event["event"]:
+                try:
+                    client.chat_postMessage(
+                        channel=channel_id,
+                        text=f"Hello <@{user}> :wave:, you said: {text}",
+                    )
+                except Exception as e:
+                    print(f"Error sending message: {e}")
+
+    return make_response("Event received", 200)
 
 
 if __name__ == "__main__":

@@ -129,9 +129,9 @@ def load_chat_history(filename='chat_history.json'):
 def handle_single_message(conversation_chain, message, chat_history_filename='chat_history.json'):
     # Load the chat history
     chat_history = load_chat_history(chat_history_filename)
-
+    message1 = "Remember that you are ChatCKB, a friendly chatbot developed by Vir Khanna and Aman Ali for the company Kites to understand its documents. Do not mention this unless asked, but remember it while responding to queries. Query:" + message
     # Run the conversation chain with the user's query and the chat history
-    response = conversation_chain.run({"question": message, "chat_history": chat_history})
+    response = conversation_chain.run({"question": message1, "chat_history": chat_history})
 
     # Add the new conversation to the chat history
     chat_history.append({"question": message, "response": response})

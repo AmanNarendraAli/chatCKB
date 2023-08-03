@@ -104,9 +104,7 @@ app = Flask(__name__)
 def slack_events():
     slack_event = request.get_json()
     if "challenge" in slack_event:
-        return make_response(
-            slack_event["challenge"], 200, {"content_type": "application/json"}
-        )
+        return make_response(slack_event["challenge"], 200, {"content-type": "application/json"})
 
     if "event" in slack_event:
         event_type = slack_event["event"]["type"]
@@ -116,16 +114,12 @@ def slack_events():
             user = slack_event["event"]["user"]
             text = slack_event["event"]["text"]
             if "bot_id" not in slack_event["event"]:
-                try:
-                    client.chat_postMessage(
-                        channel=channel_id,
-                        text=f"Hello <@{user}> :wave:, you said: {text}",
-                    )
-                except Exception as e:
-                    print(f"Error sending message: {e}")
+                bot_response = handle_single_message(
+                    conversation_chain, text, chat_history_filename
+                )
+                client.chat_postMessage(channel=channel_id, text=bot_response)
 
     return make_response("Event received", 200)
-
 
 if __name__ == "__main__":
     app.run(port=3000)

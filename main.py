@@ -24,35 +24,49 @@ openai.api_key = os.environ["OPENAI_API_KEY"]
 
 # Function to read the text from a PDF file
 def read_pdf(pdf_name):
-    # Instantiate a PDF file reader object
-    pdf_reader = PyPDF2.PdfFileReader(open(pdf_name, "rb"))
-
-    # Initialize an empty string to store the text
     text = ""
-
-    # Loop over all the pages in the PDF file and extract the text
-    for page_number in range(pdf_reader.getNumPages()):
-        text += pdf_reader.getPage(page_number).extract_text()
-
+    pdfFileObj = open(pdf_name,'rb')
+    pdf_reader=PyPDF2.PdfReader(pdfFileObj)
+    # Loop over the pages in the PDF and extract the text
+    for page in pdf_reader.pages:
+        text += page.extract_text()
     return text
 
 
 # Function to get all the PDF files in a directory
 def get_pdfs():
-    # Initialize an empty list to store the PDF file names
-    pdf_files = []
+    # compile all the PDF filenames:
+    pdfFiles = []
 
-    # Get the path to the `ckbDocs` directory
-    ckbDocs_dir = os.path.join(".", "ckbDocs")
+    # specify the path of your 'ckbDocs' subdirectory:
+    ckbDocs_path = os.path.join(os.getcwd(), 'ckbDocs')
 
-    # Loop over all the files in the `ckbDocs` directory
-    for filename in os.listdir(ckbDocs_dir):
-        # Check if the file is a PDF
-        if filename.endswith(".pdf"):
-            # If it is, add it to the list
-            pdf_files.append(filename)
+    # a nice stroll through the 'ckbDocs' folder:
+    for root, dirs, filenames in os.walk(ckbDocs_path):
+        for filename in filenames:
+            if filename.lower().endswith('.pdf') and filename!="allminutes.pdf":
+                pdfFiles.append(os.path.join(root, filename))
 
-    return pdf_files
+    # sort the list; initiate writer obj:
+    pdfFiles.sort(key = str.lower)
+    pdfWriter = PyPDF2.PdfWriter()
+
+    # Loop through all the PDF files.
+    if pdfFiles:
+        for filename in pdfFiles:
+            pdfFileObj = open(filename, 'rb')
+            pdfReader = PyPDF2.PdfReader(pdfFileObj)
+            # Loop through all the pages (except the first) and add them.
+            for pageNum in range(0, len(pdfReader.pages)):
+                pageObj = pdfReader.pages[pageNum]
+                pdfWriter.add_page(pageObj)
+
+        # Save the resulting PDF to a file.
+        pdfOutput = open('allminutes.pdf', 'wb')
+        pdfWriter.write(pdfOutput)
+        pdfOutput.close()
+
+    return pdfFiles  # Always return pdfFiles, even if it's an empty list
 
 
 # Function to get the text content from a list of text files

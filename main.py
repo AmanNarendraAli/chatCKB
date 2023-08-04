@@ -161,7 +161,7 @@ def handle_single_message(
     save_chat_history(chat_history, chat_history_filename)
 
     # Return the response
-    return response["output"]["answer"]
+    return response
 
 
 # Continue the rest of your code...

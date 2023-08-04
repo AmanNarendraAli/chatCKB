@@ -37,7 +37,36 @@ signature_verifier = SignatureVerifier(slack_signing_secret)
 app = Flask(__name__)
 
 # Global variable to store the conversation chain
+global conversation_chain
 conversation_chain = None
+if conversation_chain is None:
+    # Get all the PDFs
+    pdf_docs = get_pdfs()
+
+    # Check if there are any PDFs in the ckbDocs folder
+    if len(pdf_docs) == 0:
+        print(
+            "No PDF files found in ckbDocs folder. Please enter a URL to proceed."
+        )
+        url = input("Enter the URL: ")
+
+        # Check if input string is a valid URL
+        if validators.url(url):
+            # If it's a URL, extract the text from the webpage
+            raw_text = get_text_from_url(url)
+        else:
+            print("Invalid URL. Please check your input.")
+    else:
+        # Read the text from the combined PDF
+        raw_text = read_pdf("allminutes.pdf")
+
+        # Split the raw text into chunks
+        chunks = get_text_chunks(raw_text)
+        # Generate a vector store from the chunks
+        vectorstore = get_vectorstore(chunks)
+        # Generate a conversation chain from the vector store
+        conversation_chain = get_conversation_chain(vectorstore)
+        print("Initialized conversation chain")  # Debug print statement
 chat_history_filename = "chat_history.json"  # The filename for storing chat history
 
 
@@ -54,38 +83,6 @@ def message_actions():
     user_message = form_json["message"]["blocks"][0]["elements"][0]["elements"][0][
         "text"
     ]
-
-    global conversation_chain
-    if conversation_chain is None:
-        # Get all the PDFs
-        pdf_docs = get_pdfs()
-
-        # Check if there are any PDFs in the ckbDocs folder
-        if len(pdf_docs) == 0:
-            print(
-                "No PDF files found in ckbDocs folder. Please enter a URL to proceed."
-            )
-            url = input("Enter the URL: ")
-
-            # Check if input string is a valid URL
-            if validators.url(url):
-                # If it's a URL, extract the text from the webpage
-                raw_text = get_text_from_url(url)
-            else:
-                print("Invalid URL. Please check your input.")
-                return
-        else:
-            # Read the text from the combined PDF
-            raw_text = read_pdf("allminutes.pdf")
-
-        # Split the raw text into chunks
-        chunks = get_text_chunks(raw_text)
-        # Generate a vector store from the chunks
-        vectorstore = get_vectorstore(chunks)
-        # Generate a conversation chain from the vector store
-        conversation_chain = get_conversation_chain(vectorstore)
-        print("Initialized conversation chain")  # Debug print statement
-
     # Get the response from our bot
     bot_response = handle_single_message(
         conversation_chain, user_message, chat_history_filename

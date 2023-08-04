@@ -42,8 +42,11 @@ def get_pdfs():
     # Initialize an empty list to store the PDF file names
     pdf_files = []
 
-    # Loop over all the files in the current directory
-    for filename in os.listdir("."):
+    # Get the path to the `ckbDocs` directory
+    ckbDocs_dir = os.path.join(".", "ckbDocs")
+
+    # Loop over all the files in the `ckbDocs` directory
+    for filename in os.listdir(ckbDocs_dir):
         # Check if the file is a PDF
         if filename.endswith(".pdf"):
             # If it is, add it to the list
@@ -70,7 +73,7 @@ def get_text_file_content(txt_files):
 def get_text_chunks(raw_text):
     # Initialize the text splitter
     splitter = CharacterTextSplitter(
-        separator="\n", chunk_size=3000, chunk_overlap=250, length_function=len
+        separator="\n", chunk_size=2000, chunk_overlap=200, length_function=len
     )
 
     # Split the text into chunks
@@ -88,7 +91,7 @@ def get_vectorstore(chunks):
 
 # Function to generate a conversation chain from a vector store
 def get_conversation_chain(vectorstore):
-    llm = ChatOpenAI(temperature=0.4)
+    llm = ChatOpenAI(temperature=0.25)
     memory = ConversationBufferMemory(
         llm=llm, memory_key="chat_history", return_messages=True, output_key="answer"
     )
